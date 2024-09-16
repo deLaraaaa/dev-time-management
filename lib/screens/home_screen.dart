@@ -7,11 +7,13 @@ import 'package:dev_management_timer/widgets/time_block_card.dart';
 import 'package:dev_management_timer/widgets/new_activity_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
+  const HomeScreen({super.key});
+
+ @override
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   List<TimeBlock> timeBlocks = [
     TimeBlock(activityName: 'Estudar', duration: 60),
     TimeBlock(activityName: 'Trabalhar', duration: 120),
@@ -20,6 +22,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void addNewActivity(TimeBlock timeBlock) {
     setState(() {
       timeBlocks.add(timeBlock);
+    });
+  }
+
+  void deleteActivity(int index) {
+    setState(() {
+      timeBlocks.removeAt(index);
     });
   }
 
@@ -33,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestor de Tempo'),
+        title: const Text('Gestor de Tempo'),
       ),
       body: ListView.builder(
         itemCount: timeBlocks.length,
@@ -43,11 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
             onTimeComplete: () {
               NotificationService.showNotification(timeBlocks[index].activityName);
             },
+            onDelete: () {
+              deleteActivity(index);
+            },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        backgroundColor:const Color(0xFFbaafc4),
         onPressed: () {
           showDialog(
             context: context,
@@ -56,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
         },
+        child: const Icon(Icons.add, color: Color(0xFF3b234a)),
       ),
     );
   }

@@ -6,13 +6,13 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
   static void initialize() {
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
     _localNotifications.initialize(initializationSettings);
   }
 
   static Future<void> showNotification(String activity) async {
-    var androidDetails = AndroidNotificationDetails(
+    var androidDetails = const AndroidNotificationDetails(
       'channelId',
       'channelName',
       channelDescription: 'channelDescription', 
@@ -23,10 +23,10 @@ class NotificationService {
     var generalNotificationDetails = NotificationDetails(android: androidDetails);
 
     await _localNotifications.show(
-      0,  // id da notificação
-      'Tempo Concluído',  // título
-      'Você concluiu a atividade: $activity',  // corpo da notificação
-      generalNotificationDetails,  // detalhes da notificação
+      0,
+      'Tempo Concluído',
+      'Você concluiu a atividade: $activity',
+      generalNotificationDetails,
     );
   }
 }

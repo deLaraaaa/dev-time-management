@@ -7,21 +7,27 @@ import 'dart:async';
 class TimeBlockCard extends StatefulWidget {
   final TimeBlock timeBlock;
   final VoidCallback onTimeComplete;
+  final VoidCallback onDelete;
 
-  TimeBlockCard({required this.timeBlock, required this.onTimeComplete});
+  const TimeBlockCard({
+    super.key,
+    required this.timeBlock,
+    required this.onTimeComplete,
+    required this.onDelete,
+  });
 
   @override
-  _TimeBlockCardState createState() => _TimeBlockCardState();
+  TimeBlockCardState createState() => TimeBlockCardState();
 }
 
-class _TimeBlockCardState extends State<TimeBlockCard> {
+class TimeBlockCardState extends State<TimeBlockCard> {
   Timer? timer;
 
   void startTimer() {
     if (timer != null) {
       return;
     }
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (widget.timeBlock.duration > 0) {
           widget.timeBlock.duration--;
@@ -41,6 +47,7 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: const Color(0xFFc3bbc9),
       child: ListTile(
         title: Text(widget.timeBlock.activityName),
         subtitle: Text('Tempo restante: ${widget.timeBlock.duration} segundos'),
@@ -48,7 +55,7 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(widget.timeBlock.isPaused ? Icons.play_arrow : Icons.pause),
+              icon: Icon(widget.timeBlock.isPaused ? Icons.play_arrow : Icons.pause, color: const Color(0xFF3B234A)),
               onPressed: () {
                 setState(() {
                   widget.timeBlock.isPaused = !widget.timeBlock.isPaused;
@@ -61,11 +68,17 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
               },
             ),
             IconButton(
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Icons.refresh, color: Color(0xFF3B234A)),
               onPressed: () {
                 setState(() {
-                  widget.timeBlock.duration = widget.timeBlock.duration; // Reseta para o tempo original
+                  widget.timeBlock.duration = widget.timeBlock.initialDuration;
                 });
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete, color: Color(0xFF3B234A)),
+              onPressed: () {
+                widget.onDelete();
               },
             ),
           ],
