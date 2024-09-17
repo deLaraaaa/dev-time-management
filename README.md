@@ -13,3 +13,10 @@ O objetivo deste aplicativo é ajudar os usuários a gerenciar suas atividades d
 | #c3bbc9       | ![#c3bbc9](https://via.placeholder.com/10/c3bbc9?text=+) |
 | #d4c7bf       | ![#d4c7bf](https://via.placeholder.com/10/d4c7bf?text=+) |
 
+## Inicialização
+
+Para iniciar o projeto, rode na raíz do projeto
+
+```bash
+  flutter run
+```
