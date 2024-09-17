@@ -12,10 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  List<TimeBlock> timeBlocks = [
-    TimeBlock(activityName: 'Estudar', duration: 60),
-    TimeBlock(activityName: 'Trabalhar', duration: 120),
-  ];
+  List<TimeBlock> timeBlocks = [];
 
   void addNewActivity(TimeBlock timeBlock) {
     setState(() {
@@ -81,11 +78,10 @@ class HomeScreenState extends State<HomeScreen> {
                 return TimeBlockCard(
                   timeBlock: timeBlocks[index],
                   onTimeComplete: () {
-                    NotificationService.showNotification(
-                        timeBlocks[index].activityName);
+                    NotificationService.showNotification(timeBlocks[index].activityName);
                   },
                   onDelete: () {
-                    deleteActivity(index); // Função que deleta o item da lista
+                    deleteActivity(index);
                   },
                 );
               },
@@ -102,7 +98,7 @@ class HomeScreenState extends State<HomeScreen> {
                 );
               },
             )
-          : null, // Se a lista estiver vazia, não exibe o botão flutuante
+          : null,
     );
   }
 }

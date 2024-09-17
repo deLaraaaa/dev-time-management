@@ -15,6 +15,21 @@ class NewActivityDialogState extends State<NewActivityDialog> {
   String activityName = '';
   int duration = 0;
 
+  String? activityNameError;
+  String? durationError;
+
+  void _validateAndSave() {
+    setState(() {
+      activityNameError = activityName.isEmpty ? 'Nome da atividade não pode estar vazio' : null;
+      durationError = duration <= 0 ? 'Informe um tempo válido (segundos)' : null;
+    });
+
+    if (activityNameError == null && durationError == null) {
+      widget.onSave(TimeBlock(activityName: activityName, duration: duration));
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -23,7 +38,10 @@ class NewActivityDialogState extends State<NewActivityDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
-            decoration: const InputDecoration(labelText: 'Nome da Atividade'),
+            decoration: InputDecoration(
+              labelText: 'Nome da Atividade',
+              errorText: activityNameError,
+            ),
             onChanged: (value) {
               setState(() {
                 activityName = value;
@@ -31,7 +49,10 @@ class NewActivityDialogState extends State<NewActivityDialog> {
             },
           ),
           TextField(
-            decoration: const InputDecoration(labelText: 'Tempo (segundos)'),
+            decoration: InputDecoration(
+              labelText: 'Tempo (segundos)',
+              errorText: durationError,
+            ),
             keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly,
@@ -52,14 +73,8 @@ class NewActivityDialogState extends State<NewActivityDialog> {
           },
         ),
         ElevatedButton(
+          onPressed: _validateAndSave,
           child: const Text("Salvar"),
-          onPressed: () {
-            if (activityName.isNotEmpty && duration > 0) {
-              widget.onSave(
-                  TimeBlock(activityName: activityName, duration: duration));
-              Navigator.of(context).pop();
-            }
-          },
         ),
       ],
     );
