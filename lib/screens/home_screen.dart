@@ -1,5 +1,3 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:dev_management_timer/models/time_block.dart';
 import 'package:dev_management_timer/services/notification_service.dart';

@@ -1,5 +1,3 @@
-// lib/widgets/time_block_card.dart
-
 import 'package:flutter/material.dart';
 import 'package:dev_management_timer/models/time_block.dart';
 import 'dart:async';
