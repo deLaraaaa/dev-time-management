@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:dev_management_timer/models/time_block.dart';
 
 class NewActivityDialog extends StatefulWidget {
   final Function(TimeBlock) onSave;
 
-  NewActivityDialog({required this.onSave});
+  const NewActivityDialog({super.key, required this.onSave});
 
   @override
-  _NewActivityDialogState createState() => _NewActivityDialogState();
+  NewActivityDialogState createState() => NewActivityDialogState();
 }
 
-class _NewActivityDialogState extends State<NewActivityDialog> {
+class NewActivityDialogState extends State<NewActivityDialog> {
   String activityName = '';
   int duration = 0;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Nova Atividade"),
+      title: const Text("Nova Atividade"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
-            decoration: InputDecoration(labelText: 'Nome da Atividade'),
+            decoration: const InputDecoration(labelText: 'Nome da Atividade'),
             onChanged: (value) {
               setState(() {
                 activityName = value;
@@ -30,8 +31,11 @@ class _NewActivityDialogState extends State<NewActivityDialog> {
             },
           ),
           TextField(
-            decoration: InputDecoration(labelText: 'Tempo (segundos)'),
+            decoration: const InputDecoration(labelText: 'Tempo (segundos)'),
             keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             onChanged: (value) {
               setState(() {
                 duration = int.tryParse(value) ?? 0;
@@ -42,16 +46,17 @@ class _NewActivityDialogState extends State<NewActivityDialog> {
       ),
       actions: [
         TextButton(
-          child: Text("Cancelar"),
+          child: const Text("Cancelar"),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         ElevatedButton(
-          child: Text("Salvar"),
+          child: const Text("Salvar"),
           onPressed: () {
             if (activityName.isNotEmpty && duration > 0) {
-              widget.onSave(TimeBlock(activityName: activityName, duration: duration));
+              widget.onSave(
+                  TimeBlock(activityName: activityName, duration: duration));
               Navigator.of(context).pop();
             }
           },
