@@ -40,15 +40,7 @@ class HomeScreenState extends State<HomeScreen> {
       ),
       body: timeBlocks.isEmpty
           ? Center(
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                  backgroundColor: const Color(0xFFbaafc4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
+              child: AddActivityButton(
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -57,19 +49,6 @@ class HomeScreenState extends State<HomeScreen> {
                     },
                   );
                 },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Adicionar Atividade",
-                      style: TextStyle(color: Color(0xFF3b234a), fontSize: 18),
-                    ),
-                    SizedBox(
-                        width:
-                            8),
-                    Icon(Icons.add, color: Color(0xFF3b234a)),
-                  ],
-                ),
               ),
             )
           : ListView.builder(
@@ -99,6 +78,65 @@ class HomeScreenState extends State<HomeScreen> {
               },
             )
           : null,
+    );
+  }
+}
+
+class AddActivityButton extends StatefulWidget {
+  final VoidCallback onPressed;
+
+  const AddActivityButton({super.key, required this.onPressed});
+
+  @override
+  AddActivityButtonState createState() => AddActivityButtonState();
+}
+
+class AddActivityButtonState extends State<AddActivityButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() {
+          _isHovered = true;
+        });
+      },
+      onExit: (_) {
+        setState(() {
+          _isHovered = false;
+        });
+      },
+      child: InkWell(
+        onTap: widget.onPressed,
+        borderRadius: BorderRadius.circular(8),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            color: _isHovered ? const Color(0xFF3b234a) : const Color(0xFFbaafc4),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 300),
+                style: TextStyle(
+                  color: _isHovered ? const Color(0xFFbaafc4) : const Color(0xFF3b234a),
+                  fontSize: 18,
+                ),
+                child: const Text("Adicionar Atividade"),
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.add,
+                color: _isHovered ? const Color(0xFFbaafc4) : const Color(0xFF3b234a),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

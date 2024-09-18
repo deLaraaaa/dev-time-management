@@ -53,7 +53,9 @@ class TimeBlockCardState extends State<TimeBlockCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(widget.timeBlock.isPaused ? Icons.play_arrow : Icons.pause, color: const Color(0xFF3B234A)),
+              icon: Icon(
+                  widget.timeBlock.isPaused ? Icons.play_arrow : Icons.pause,
+                  color: const Color(0xFF3B234A)),
               onPressed: () {
                 setState(() {
                   widget.timeBlock.isPaused = !widget.timeBlock.isPaused;
@@ -76,6 +78,12 @@ class TimeBlockCardState extends State<TimeBlockCard> {
             IconButton(
               icon: const Icon(Icons.delete, color: Color(0xFF3B234A)),
               onPressed: () {
+                setState(() {
+                  widget.timeBlock.isPaused = !widget.timeBlock.isPaused;
+                  if (widget.timeBlock.isPaused) {
+                    pauseTimer();
+                  }
+                });
                 widget.onDelete();
               },
             ),
