@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dev_management_timer/models/time_block.dart';
 import 'dart:async';
+import 'progress_bar.dart';
 
 class TimeBlockCard extends StatefulWidget {
   final TimeBlock timeBlock;
@@ -52,6 +53,10 @@ class TimeBlockCardState extends State<TimeBlockCard> {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ProgressBar(
+              duration: widget.timeBlock.duration,
+              initialDuration: widget.timeBlock.initialDuration,
+            ),
             IconButton(
               icon: Icon(
                   widget.timeBlock.isPaused ? Icons.play_arrow : Icons.pause,

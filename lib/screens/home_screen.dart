@@ -12,24 +12,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  List<TimeBlock> timeBlocks = [];
+  Map<String, int> activities = {};
 
-  void addNewActivity(TimeBlock timeBlock) {
+  void addNewActivity(String activityName, int duration) {
     setState(() {
-      timeBlocks.add(timeBlock);
+      activities[activityName] = duration;
     });
   }
 
-  void deleteActivity(int index) {
+  void deleteActivity(String activityName) {
     setState(() {
-      timeBlocks.removeAt(index);
+      activities.remove(activityName);
     });
+  }
+
+void mockActivity() {
+    addNewActivity('Estudar Flutter', 60);
+    addNewActivity('Correr', 90);
   }
 
   @override
   void initState() {
     super.initState();
     NotificationService.initialize();
+    mockActivity();
   }
 
   @override
@@ -38,7 +44,7 @@ class HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Gestor de Tempo'),
       ),
-      body: timeBlocks.isEmpty
+      body: activities.isEmpty
           ? Center(
               child: AddActivityButton(
                 onPressed: () {
@@ -52,20 +58,22 @@ class HomeScreenState extends State<HomeScreen> {
               ),
             )
           : ListView.builder(
-              itemCount: timeBlocks.length,
+              itemCount: activities.length,
               itemBuilder: (context, index) {
+                String activityName = activities.keys.elementAt(index);
+                int duration = activities[activityName]!;
                 return TimeBlockCard(
-                  timeBlock: timeBlocks[index],
+                  timeBlock: TimeBlock(activityName: activityName, duration: duration),
                   onTimeComplete: () {
-                    NotificationService.showNotification(timeBlocks[index].activityName);
+                    NotificationService.showNotification(activityName);
                   },
                   onDelete: () {
-                    deleteActivity(index);
+                    deleteActivity(activityName);
                   },
                 );
               },
             ),
-      floatingActionButton: timeBlocks.isNotEmpty
+      floatingActionButton: activities.isNotEmpty
           ? FloatingActionButton(
               child: const Icon(Icons.add),
               onPressed: () {

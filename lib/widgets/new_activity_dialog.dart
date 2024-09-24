@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dev_management_timer/models/time_block.dart';
 
 class NewActivityDialog extends StatefulWidget {
-  final Function(TimeBlock) onSave;
+  final Function(String, int) onSave;
 
   const NewActivityDialog({super.key, required this.onSave});
 
@@ -25,10 +24,12 @@ class NewActivityDialogState extends State<NewActivityDialog> {
     });
 
     if (activityNameError == null && durationError == null) {
-      widget.onSave(TimeBlock(activityName: activityName, duration: duration));
+      widget.onSave(activityName, duration);
       Navigator.of(context).pop();
     }
   }
+
+  bool get _hasError => activityNameError != null || durationError != null;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,11 @@ class NewActivityDialogState extends State<NewActivityDialog> {
             onChanged: (value) {
               setState(() {
                 activityName = value;
+                activityNameError = activityName.isEmpty
+                    ? 'Nome da atividade não pode estar vazio'
+                    : activityName.length > 50
+                        ? 'O nome da atividade não pode ter mais de 50 caracteres'
+                        : null;
               });
             },
           ),
@@ -60,6 +66,7 @@ class NewActivityDialogState extends State<NewActivityDialog> {
             onChanged: (value) {
               setState(() {
                 duration = int.tryParse(value) ?? 0;
+                durationError = duration <= 0 ? 'Informe um tempo válido (segundos)' : null;
               });
             },
           ),
@@ -73,7 +80,10 @@ class NewActivityDialogState extends State<NewActivityDialog> {
           },
         ),
         ElevatedButton(
-          onPressed: _validateAndSave,
+          onPressed: _hasError ? null : _validateAndSave,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: _hasError ? Colors.grey : null
+          ),
           child: const Text("Salvar"),
         ),
       ],
